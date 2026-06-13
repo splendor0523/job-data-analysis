@@ -1,0 +1,11 @@
+Job Analysis Summary
+====================
+
+Total jobs: 10
+Python-related jobs: 8
+Data analysis jobs: 3
+
+Most frequent skill: Python (8 times)
+Most frequent skill in data analysis jobs: Python (3 times)
+City with highest average salary: 杭州 (220.00)
+Highest salary job: 数据分析师 in 杭州 (220)
