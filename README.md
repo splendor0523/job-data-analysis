@@ -100,3 +100,4 @@ This project practices:
 * Writing text summary files
 * Managing project paths with `pathlib.Path`
 
+This project is part of my Linux and pandas learning practice.
