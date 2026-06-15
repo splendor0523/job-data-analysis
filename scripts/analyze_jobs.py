@@ -1,6 +1,7 @@
 import pandas as pd
 import argparse
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR/"data"
@@ -43,6 +44,22 @@ if not input_path.exists():
     )
 
 df = pd.read_csv(input_path)
+
+def save_bar_chart(data,x_col,y_col,title,xlabel,ylabel,output_path,top_n=None):
+    plot_data = data.copy()
+
+    if top_n is None:
+        plot_data = plot_data.head(top_n)
+
+    plt.figure(figsize=(10,6))
+    plt.bar(plot_data[x_col], plot_data[y_col])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+
 
 required_columns = {"title","city","salary","skills"}
 actual_columns = set(df.columns)
@@ -147,6 +164,37 @@ print("\nHigh salary jobs:")
 print(high_salary_jobs)
 
 high_salary_jobs.to_csv(output_dir/"high_salary_jobs.csv", index=False)
+
+save_bar_chart(
+    data=skill_counts_df,
+    x_col="skill",
+    y_col="count",
+    title="Top Skills in Job Posts",
+    xlabel="Skill",
+    ylabel="Count",
+    output_path=output_dir / "skill_counts.png",
+    top_n=10
+)
+
+save_bar_chart(
+    data=city_salary_sorted,
+    x_col="city",
+    y_col="avg_salary",
+    title="Average Salary by City",
+    xlabel="City",
+    ylabel="Average Salary",
+    output_path=output_dir / "city_avg_salary.png"
+)
+
+save_bar_chart(
+    data=high_salary_jobs.head(10),
+    x_col="title",
+    y_col="salary",
+    title="Top Salary Jobs",
+    xlabel="Job Title",
+    ylabel="Salary",
+    output_path=output_dir / "high_salary_jobs.png"
+)
 
 # ===================================================================
 data_analyze_jobs.to_csv(output_dir/"data_analysis_jobs.csv", index=False)
