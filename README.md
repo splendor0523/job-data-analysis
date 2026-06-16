@@ -101,3 +101,26 @@ This project practices:
 * Managing project paths with `pathlib.Path`
 
 This project is part of my Linux and pandas learning practice.
+
+## Example Charts
+
+The project automatically generates several charts to help visualize the job data analysis results.
+
+### Skill Counts
+
+![Skill Counts](output/skill_counts.png)
+
+This chart shows the frequency of different skills mentioned in the job dataset.
+
+### Average Salary by City
+
+![Average Salary by City](output/city_avg_salary.png)
+
+This chart compares the average salary across different cities.
+
+### High Salary Jobs
+
+![High Salary Jobs](output/high_salary_jobs.png)
+
+This chart shows selected high salary jobs from the dataset.
+
