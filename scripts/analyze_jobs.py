@@ -25,57 +25,65 @@ def parse_args():
     )
     return parser.parse_args()
 
-args = parse_args()
+def resolve_paths(args):
+    input_path = Path(args.input)
+    output_dir = Path(args.output)
 
-input_path = Path(args.input)
-output_dir = Path(args.output)
+    if not input_path.is_absolute():
+        input_path = BASE_DIR / input_path
+    if not output_dir.is_absolute():
+        output_dir = BASE_DIR /output_dir
 
-if not input_path.is_absolute():
-    input_path = BASE_DIR / input_path
-if not output_dir.is_absolute():
-    output_dir = BASE_DIR /output_dir
+    output_dir.mkdir(exist_ok=True,parents=True)
+    return input_path,output_dir
 
-output_dir.mkdir(exist_ok=True,parents=True)
+def load_data(input_path):
+    if not input_path.exists():
+        raise FileNotFoundError(
+            f"Input file not found : {input_path}\n"
+            f"please make sure job.csv exists in the data folder"
+        )
 
-if not input_path.exists():
-    raise FileExistsError(
-        f"Input file not found : {input_path}\n"
-        f"please make sure job.csv exists in the data folder"
-    )
-
-df = pd.read_csv(input_path)
+    return pd.read_csv(input_path)
 
 def save_bar_chart(data,x_col,y_col,title,xlabel,ylabel,output_path,top_n=None):
     plot_data = data.copy()
 
-    if top_n is None:
+    if top_n is not None:
         plot_data = plot_data.head(top_n)
 
     plt.figure(figsize=(10,6))
     plt.bar(plot_data[x_col], plot_data[y_col])
     plt.title(title)
     plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)
     plt.close()
 
+def validate_data(df):
+    required_columns = {"title","city","salary","skills"}
+    actual_columns = set(df.columns)
+    missing_columns = required_columns - actual_columns
+    if missing_columns:
+        raise ValueError(
+            f"Missing required columns: {missing_columns}\n"
+            f"Required columns are: {required_columns}"
+        )
 
-required_columns = {"title","city","salary","skills"}
-actual_columns = set(df.columns)
-missing_columns = required_columns - actual_columns
-if missing_columns:
-    raise ValueError(
-        f"Missing required columns: {missing_columns}\n"
-        f"Required columns are: {required_columns}"
-    )
+    df["salary"] = pd.to_numeric(df["salary"],errors="coerce")
+    if df["salary"].isna().any():
+        raise ValueError(
+            "The salary column contains invalid values. "
+            "Please make sure all salary values are numbers."
+        )
+    return df
 
-df["salary"] = pd.to_numeric(df["salary"],errors="coerce")
-if df["salary"].isna().any():
-    raise ValueError(
-         "The salary column contains invalid values. "
-        "Please make sure all salary values are numbers."
-    )
+args = parse_args()
+input_path, output_dir = resolve_paths(args)
+df = load_data(input_path)
+df = validate_data(df)
 
 print("Original data:")
 print(df)
