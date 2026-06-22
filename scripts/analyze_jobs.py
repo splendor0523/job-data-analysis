@@ -80,19 +80,23 @@ def validate_data(df):
         )
     return df
 
+def print_basic_info(df):
+    print("Original data:")
+    print(df)
+
+    print("\nBasic info:")
+    df.info()
+
+    print("\nFirst 5 rows")
+    print(df.head())
+
+
 args = parse_args()
 input_path, output_dir = resolve_paths(args)
 df = load_data(input_path)
 df = validate_data(df)
 
-print("Original data:")
-print(df)
-
-print("\nBasic info:")
-df.info()
-
-print("\nFirst 5 rows")
-print(df.head())
+print_basic_info(df)
 
 # ============================================================================
 
