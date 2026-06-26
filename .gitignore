@@ -10,3 +10,6 @@ output_test/
 
 # System files
 .DS_Store
+
+#Others
+.claude
