@@ -46,8 +46,48 @@ if uploaded_file is not None:
 else:
     st.info("Using default sample data: data/jobs.csv")
 
-    
-results = create_analysis_results(df)
+st.sidebar.header("Filters")
+filtered_df = df.copy()
+cities = sorted(df["city"].dropna().unique())
+
+selected_cities = st.sidebar.multiselect(
+    "Select cities",
+    options=cities,
+    default=cities
+)
+if selected_cities:
+    filtered_df = filtered_df[filtered_df["city"].isin(selected_cities)]
+
+skill_keyword = st.sidebar.text_input(
+    "Search skill keyword",
+    value="" 
+)
+
+if skill_keyword:
+    filtered_df = filtered_df[
+        filtered_df["skills"].str.contains(skill_keyword,case=False,na=False)
+        ]
+
+min_salary = int(df["salary"].min())
+max_salary = int(df["salary"].max())
+
+if min_salary < max_salary:
+    salary_range = st.sidebar.slider(
+        "Salary range",
+        min_value = min_salary,
+        max_value = max_salary,
+        value= (min_salary,max_salary)
+    )
+
+    filtered_df = filtered_df[
+        filtered_df["salary"].between(salary_range[0],salary_range[1])
+        ]
+
+if filtered_df.empty:
+    st.warning("No jobs match the current filters.")
+    st.stop()
+
+results = create_analysis_results(filtered_df)
 
 st.subheader("Key Metrics")
 col1,col2,col3,col4 = st.columns(4)
@@ -81,4 +121,4 @@ st.subheader("Top High Salary Jobs")
 st.dataframe(results["high_salary_jobs"].head(10))
 
 st.subheader("Original Job Data")
-st.dataframe(df)
+st.dataframe(filtered_df)
