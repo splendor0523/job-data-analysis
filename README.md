@@ -1,6 +1,8 @@
 # Job Data Analysis Project
 
-This is a small pandas project for analyzing job posting data.
+A Python-based job data analysis and visualization project.
+
+This project uses pandas to clean and analyze job posting data, matplotlib to generate chart outputs, and Streamlit to build an interactive web dashboard. It supports both command-line analysis and web-based exploration, including CSV upload, data validation, key metrics, charts, tables, and sidebar filters.
 
 ## Project Goal
 
@@ -16,6 +18,17 @@ The project reads a CSV file of job postings and generates several analysis resu
 * Jobs sorted by salary
 * A text summary report
 
+## Project Highlights
+* Built a reusable pandas analysis workflow for job posting data
+* Refactored analysis logic into reusable functions
+* Added command-line arguments with argparse
+* Used pathlib to manage project paths reliably
+* Added data validation for required columns and salary format
+* Generated CSV outputs, text summaries, and PNG charts
+* Built an interactive Streamlit dashboard
+* Reused analysis functions in the web app instead of duplicating logic
+* Managed development with Git branches and GitHub
+
 ## Project Structure
 
 ```text
@@ -28,6 +41,24 @@ day6/
 ├── README.md
 └── requirements.txt
 ```
+
+## Web Dashboard
+This project includes a Streamlit web dashboard for interactive job data exploration.
+
+Main dashboard features:
+
+Load the default sample dataset from data/jobs.csv
+Upload a custom CSV file
+Validate required columns: title, city, salary, and skills
+Show key metrics such as total jobs, average salary, Python-related jobs, and data analysis jobs
+Display city counts and skill counts
+Visualize top skills and average salary by city
+Show high salary jobs
+Filter jobs by city, skill keyword, and salary range
+
+Run the dashboard with:
+
+streamlit run app.py
 
 ## Input Data
 
