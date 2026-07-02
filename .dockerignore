@@ -1,0 +1,6 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+output_test/
+README_backup.md
